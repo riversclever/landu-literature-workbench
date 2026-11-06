@@ -25,6 +25,13 @@
     reviewer: "审稿人视角",
   };
 
+  const FOCUS_HINTS = {
+    standard: "全覆盖：问题、创新、方法、证据、结论与局限",
+    methods: "只写方法维度：设计、质控、统计、复现清单",
+    writing: "只写写作维度：结构、论证、图表、句式",
+    reviewer: "只写审稿维度：效度、证据、风险、意见",
+  };
+
   const STATUS_LABELS = { unread: "待读", reading: "在读", read: "已读" };
 
   const CATEGORY_COLORS = ["#4f7b67", "#a46b3f", "#5b7d97", "#8a7a45", "#8a5a72", "#6e7f5a", "#96704b", "#5f6f8f"];
@@ -1585,7 +1592,7 @@
                 '<button type="button" data-focus="' + key + '" class="' + (orphanFocus === key ? "active" : "") + '">' +
                 FOCUS_LABELS[key] + "</button>").join("") +
               '</div><button type="button" class="btn btn-primary" id="start-card">' + icon("sparkles") + "生成精读卡</button></div>" +
-              '<p class="tiny">预计 30–90 秒。生成的卡片会保存在本地。</p>'
+              '<p class="tiny" id="gen-focus-hint">' + esc(FOCUS_HINTS[orphanFocus] || "") + " · 预计 30–90 秒；生成的卡片会保存在本地。</p>"
             : "") +
         "</div>";
     }
@@ -1606,15 +1613,30 @@
         "</section>"
       : "";
 
+    const focusNote = card && !streaming && !errored
+      ? '<div class="focus-note" id="focus-note">' +
+        esc(FOCUS_HINTS[focus] || "") +
+        (paper.demo && paper.card_model === "demo-preview"
+          ? " · 内置示例卡是预置内容，点「重新生成」才会按新模式重写"
+          : " · 改模式后点「重新生成」生效") +
+        "</div>"
+      : "";
     setTabPanel('<div class="card-wrap">' +
       '<div class="card-toolbar"><span class="meta-line">' + (paper.demo ? "示例精读卡" : "AI 精读卡") +
       '</span><span class="evidence-summary" id="card-evidence-summary"></span><div class="right">' + toolbarRight + "</div></div>" +
-      body + takeawayPanel + "</div>");
+      focusNote + body + takeawayPanel + "</div>");
 
     if (streaming && $("#stop-card")) $("#stop-card").addEventListener("click", stopCardGeneration);
     if ($("#card-focus")) {
       $("#card-focus").addEventListener("change", (event) => {
         App.cardFocus[paper.id] = event.target.value;
+        const note = $("#focus-note");
+        if (note) {
+          note.textContent = (FOCUS_HINTS[event.target.value] || "") +
+            (paper.demo && paper.card_model === "demo-preview"
+              ? " · 内置示例卡是预置内容，点「重新生成」才会按新模式重写"
+              : " · 改模式后点「重新生成」生效");
+        }
       });
     }
     if ($("#regen-card")) {
@@ -1629,6 +1651,11 @@
         if (!button) return;
         App.cardFocus[paper.id] = button.dataset.focus;
         $$("#gen-focus-pills button").forEach((item) => item.classList.toggle("active", item === button));
+        const hint = $("#gen-focus-hint");
+        if (hint) {
+          hint.textContent = (FOCUS_HINTS[button.dataset.focus] || "") +
+            " · 预计 30–90 秒；生成的卡片会保存在本地。";
+        }
       });
     }
     if ($("#copy-card")) {

@@ -852,6 +852,14 @@ svg { flex-shrink: 0; }
   outline: none;
 }
 .focus-select:hover { border-color: var(--line); background-color: rgba(255, 253, 248, 0.6); }
+.focus-note {
+  margin: -4px 0 14px;
+  padding-left: 10px;
+  border-left: 2px solid rgba(173, 119, 70, 0.35);
+  color: var(--faint);
+  font-size: 10.5px;
+  line-height: 1.7;
+}
 
 .card-paper {
   position: relative;
