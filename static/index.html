@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="本地优先的文献精读工作台：上传 PDF，生成带页码证据的精读卡，并基于全文追问。">
+  <title>澜读 · 文献工作台</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <svg class="svg-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5V5.5M8 7h8M8 11h6"/></symbol>
+    <symbol id="i-compare" viewBox="0 0 24 24"><rect x="3" y="4" width="7.5" height="16" rx="1.5"/><rect x="13.5" y="4" width="7.5" height="16" rx="1.5"/><path d="M6 8h1.5M16.5 8H18"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9 19.35a1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.63 15a1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.65 9a1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.63a1.7 1.7 0 0 0 1.03-1.56V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15 4.65a1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.37 9c.18.63.75 1.06 1.4 1.06H21a2 2 0 1 1 0 4h-.09A1.7 1.7 0 0 0 19.4 15z"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m12 3 1.6 5.4L19 10l-5.4 1.6L12 17l-1.6-5.4L5 10l5.4-1.6z"/><path d="m19 16 .7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 9 9 0 0 1-3.8-.8L3 21l1.3-4.2A8.5 8.5 0 1 1 21 11.5z"/><path d="M8 10.5h8M8 14h5"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h6"/></symbol>
+    <symbol id="i-note" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 20h16"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"/><path d="M19 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/><path d="M4 20h16"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 6.3"/><path d="M20 5v6h-6"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1.5"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14"/><path d="m21 3-7 18-4-7-7-4z"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4z"/><path d="M12 9v5M12 17.5v.1"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1.2 1.2"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1.2-1.2"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h7l-1 8 11-13h-7z"/></symbol>
+    <symbol id="i-quote" viewBox="0 0 24 24"><path d="M9 11H4a4 4 0 0 1 4-4v10a3 3 0 0 1-3 3H4M20 11h-5a4 4 0 0 1 4-4v10a3 3 0 0 1-3 3h-1"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5M3 17l9 5 9-5"/></symbol>
+    <symbol id="i-pdf" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 17v-5h1.5a1.5 1.5 0 0 1 0 3H8M12 17v-5h1.6a2.5 2.5 0 0 1 0 5zM17 12h2M17 12v5M17 14.5h1.5"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="i-obsidian" viewBox="0 0 24 24"><path d="M12 2.7 5 7v10l7 4.3 7-4.3V7z"/><path d="m5 7 7 4 7-4M12 11v10.3M8.5 4.9 12 11l3.5-6.1"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="m3 3 18 18"/><path d="M10.6 5.2A11 11 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.1 4.1M6.6 6.6A17.5 17.5 0 0 0 2 12s3.5 7 10 7a10.8 10.8 0 0 0 4.4-.9"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></symbol>
+  </svg>
+
+  <div class="app" id="app">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#/library" aria-label="回到文献库">
+        <span class="brand-mark">
+          <svg viewBox="0 0 44 44" aria-hidden="true">
+            <circle cx="22" cy="22" r="20.5" fill="none" stroke="currentColor" stroke-opacity=".28"/>
+            <path d="M9 25.5c4.2 0 5.8-3.6 9.8-3.6s5.6 3.6 9.8 3.6 5.8-1.8 6.4-2.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            <path d="M9 31c4.2 0 5.8-3.6 9.8-3.6s5.6 3.6 9.8 3.6 5.8-1.8 6.4-2.7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity=".62"/>
+            <path d="M16 8.5h13.5A3.5 3.5 0 0 1 33 12v8.2c-2.6 1.1-4.6 3.4-8.1 3.4-2.2 0-3.7-1-5.1-1.9V14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="brand-text"><strong>澜读</strong><small>文献工作台</small></span>
+      </a>
+
+      <nav class="nav-main" aria-label="主要导航">
+        <a class="nav-item" href="#/library" data-nav="library">
+          <svg class="icon"><use href="#i-book"></use></svg>
+          <span>文献库</span>
+          <span class="nav-count" id="nav-total">0</span>
+        </a>
+        <a class="nav-item" href="#/compare" data-nav="compare">
+          <svg class="icon"><use href="#i-compare"></use></svg>
+          <span>多篇对比</span>
+        </a>
+        <a class="nav-item" href="#/trash" data-nav="trash">
+          <svg class="icon"><use href="#i-trash"></use></svg>
+          <span>回收站</span>
+          <span class="nav-count" id="nav-trash-count">0</span>
+        </a>
+      </nav>
+
+      <div class="side-section">
+        <div class="side-label">阅读状态</div>
+        <a class="side-link" href="#/library?status=unread" data-status="unread"><span class="status-dot unread"></span>待读 <span class="side-count" data-count="unread">0</span></a>
+        <a class="side-link" href="#/library?status=reading" data-status="reading"><span class="status-dot reading"></span>在读 <span class="side-count" data-count="reading">0</span></a>
+        <a class="side-link" href="#/library?status=read" data-status="read"><span class="status-dot read"></span>已读 <span class="side-count" data-count="read">0</span></a>
+        <a class="side-link" href="#/library?starred=1"><svg class="icon mini"><use href="#i-star"></use></svg>星标 <span class="side-count" data-count="starred">0</span></a>
+      </div>
+
+      <div class="side-section categories-section">
+        <div class="side-label-row"><div class="side-label">分类</div><button type="button" class="side-action" data-manage-categories>管理</button></div>
+        <div id="category-nav" class="category-nav"></div>
+      </div>
+
+      <div class="side-section tags-section">
+        <div class="side-label">标签</div>
+        <div id="tag-nav" class="tag-nav"></div>
+      </div>
+
+      <div class="sidebar-art" aria-hidden="true">
+        <svg viewBox="0 0 260 130" preserveAspectRatio="none">
+          <path d="M-10 26c45 0 50 26 95 26s55-34 100-34 60 25 85 25" fill="none" stroke="currentColor" stroke-opacity=".12"/>
+          <path d="M-10 52c45 0 50 26 95 26s55-34 100-34 60 25 85 25" fill="none" stroke="currentColor" stroke-opacity=".10"/>
+          <path d="M-10 78c45 0 50 26 95 26s55-34 100-34 60 25 85 25" fill="none" stroke="currentColor" stroke-opacity=".08"/>
+          <path d="M-10 104c45 0 50 26 95 26s55-34 100-34 60 25 85 25" fill="none" stroke="currentColor" stroke-opacity=".06"/>
+        </svg>
+      </div>
+
+      <div class="sidebar-foot">
+        <button class="api-status" id="api-status" type="button" title="打开设置">
+          <span class="status-dot" id="api-dot"></span>
+          <span id="api-label">检查 AI 配置</span>
+        </button>
+        <a class="nav-item nav-settings" href="#/settings" data-nav="settings">
+          <svg class="icon"><use href="#i-gear"></use></svg>
+          <span>设置</span>
+        </a>
+      </div>
+    </aside>
+
+    <div class="main-shell">
+      <header class="topbar">
+        <button class="icon-btn mobile-menu" id="menu-toggle" type="button" aria-label="打开导航">
+          <svg class="icon"><use href="#i-menu"></use></svg>
+        </button>
+        <div class="topbar-title" id="topbar-title">文献库</div>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost topbar-btn" id="zotero-btn" type="button" aria-label="从 Zotero 导入">
+            <svg class="icon"><use href="#i-layers"></use></svg>
+            <span class="hide-sm">从 Zotero 导入</span>
+          </button>
+          <button class="btn btn-primary topbar-btn" id="upload-btn" type="button">
+            <svg class="icon"><use href="#i-upload"></use></svg>
+            <span>上传 PDF</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="view" id="view" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <div class="sidebar-scrim" id="sidebar-scrim"></div>
+
+  <div class="drop-overlay" id="drop-overlay" aria-hidden="true">
+    <div class="drop-inner">
+      <div class="drop-mark"><svg class="icon"><use href="#i-upload"></use></svg></div>
+      <h2>松开以导入文献</h2>
+      <p>支持文本版 PDF，可一次拖入多篇</p>
+    </div>
+  </div>
+
+  <input type="file" id="file-input" accept="application/pdf,.pdf" multiple hidden>
+  <div id="modal-root"></div>
+  <div id="toast-root" class="toast-root" aria-live="polite" aria-atomic="false"></div>
+
+  <script src="/static/markdown.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

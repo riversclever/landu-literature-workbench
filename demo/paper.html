@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DEMO — Short-term hypoxia and sediment phosphorus release</title>
+<style>
+  @page { size: A4; margin: 0; }
+  html, body { margin: 0; padding: 0; background: #fff; }
+  body { font-family: "Times New Roman", Times, serif; color: #1d2522; }
+  .sheet {
+    position: relative;
+    width: 210mm;
+    height: 296.8mm;
+    padding: 15mm 17mm 15mm;
+    box-sizing: border-box;
+    overflow: hidden;
+    page-break-after: always;
+  }
+  .sheet:last-child { page-break-after: auto; }
+  .demo-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 3mm; border-bottom: .6pt solid #d8c8b4;
+    color: #916a48; font-family: Arial, sans-serif; font-size: 7pt;
+    letter-spacing: .13em; text-transform: uppercase;
+  }
+  .demo-header span:last-child { color: #8b9b93; letter-spacing: .07em; }
+  .watermark {
+    position: absolute; top: 43%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-28deg);
+    color: rgba(23, 63, 55, .035); font-family: Arial, sans-serif;
+    font-size: 95pt; font-weight: bold; letter-spacing: .08em;
+    pointer-events: none; white-space: nowrap;
+  }
+  .kicker { margin-top: 8mm; color: #a06e44; font-family: Arial, sans-serif; font-size: 7.5pt; letter-spacing: .16em; }
+  h1 { margin: 2.5mm 0 4mm; font-size: 22pt; line-height: 1.2; letter-spacing: -.01em; }
+  .authors { font-size: 10.2pt; }
+  .affil { margin-top: 1.5mm; color: #58635d; font-size: 8pt; }
+  .demo-box {
+    margin-top: 5.5mm; padding: 3mm 4mm;
+    color: #6b4a2e; background: #fbf6ed;
+    border: .8pt dashed #b78b60; border-radius: 1.5mm;
+    font-family: Arial, sans-serif; font-size: 7.8pt; line-height: 1.55;
+  }
+  .abstract-label { margin-top: 5mm; color: #173f37; font-family: Arial, sans-serif; font-size: 8pt; font-weight: bold; letter-spacing: .13em; }
+  .abstract {
+    margin-top: 1.8mm; padding: 3.5mm 4.5mm;
+    background: #f6f2e9; border-left: 2.5pt solid #b78b60;
+    font-size: 9.1pt; line-height: 1.48; text-align: justify;
+  }
+  .keywords { margin-top: 2.8mm; font-size: 8.7pt; line-height: 1.55; }
+  .highlights {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2.2mm 7mm;
+    margin-top: 4mm; padding: 3mm 4mm; border: .5pt solid #e1d8c9;
+    font-size: 8.1pt; line-height: 1.45;
+  }
+  .highlights div { padding-left: 3.5mm; position: relative; }
+  .highlights div::before { content: "—"; position: absolute; left: 0; color: #a06e44; }
+  h2 {
+    margin: 5mm 0 1.8mm; padding-bottom: .8mm;
+    color: #173f37; border-bottom: .5pt solid #ddd4c5;
+    font-family: Arial, sans-serif; font-size: 11pt;
+  }
+  h3 { margin: 3.2mm 0 1.2mm; color: #2c4a40; font-family: Arial, sans-serif; font-size: 9.2pt; }
+  p { margin: 0 0 2.1mm; font-size: 9.35pt; line-height: 1.42; text-align: justify; }
+  .small { color: #5c665f; font-size: 8.2pt; line-height: 1.4; }
+  table { width: 100%; margin: 2.5mm 0 2mm; border-collapse: collapse; font-size: 8.1pt; }
+  th, td { padding: 1.5mm 1.8mm; border: .5pt solid #d8d0c2; text-align: left; }
+  th { background: #eef3ef; font-family: Arial, sans-serif; font-size: 7.7pt; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .caption { margin: 1mm 0 3mm; color: #6b746e; font-size: 7.7pt; line-height: 1.45; }
+  .equation {
+    margin: 2.5mm 4mm; padding: 2.2mm 3mm; background: #f8f5ee;
+    border-left: 2pt solid #c6aa84; font-size: 8.8pt;
+  }
+  .footer {
+    position: absolute; left: 17mm; right: 17mm; bottom: 7mm;
+    display: flex; justify-content: space-between;
+    padding-top: 2mm; border-top: .4pt solid #e3ddd2;
+    color: #9a9f9b; font-family: Arial, sans-serif; font-size: 7pt;
+  }
+  .refs p { margin-bottom: 1.4mm; font-size: 8.3pt; line-height: 1.36; text-indent: -4mm; padding-left: 4mm; }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<section class="sheet">
+  <div class="demo-header"><span>DEMO PAPER · FICTIONAL STUDY FOR INTERFACE DEMONSTRATION</span><span>NOT FOR CITATION</span></div>
+  <div class="watermark">DEMO</div>
+  <div class="kicker">DEMO RESEARCH ARTICLE · WATER ENVIRONMENT</div>
+  <h1>Short-term hypoxia mobilizes iron-bound phosphorus in a drinking-water reservoir: a laboratory core incubation</h1>
+  <div class="authors">Lin Wei<sup>1</sup>, Ana M. Costa<sup>2</sup>, Y. Chen<sup>1</sup></div>
+  <div class="affil"><sup>1</sup> Demo Institute of Water and Environment, Lake City, China &nbsp;·&nbsp; <sup>2</sup> Demo School of Environmental Science, Porto, Portugal</div>
+  <div class="demo-box"><strong>Demo document.</strong> This paper, its authors, site description, data and references are fictional. It was created solely to demonstrate the interface of this workbench. Do not cite or reuse any value as scientific evidence.</div>
+
+  <div class="abstract-label">ABSTRACT</div>
+  <div class="abstract">Hypolimnetic hypoxia is a growing concern in stratified drinking-water reservoirs, yet the short-term response of sediment phosphorus (P) release to oxygen depletion remains poorly constrained. We incubated intact sediment cores from three sites (S1–S3) in a eutrophic reservoir under normoxic (DO &gt; 6 mg L<sup>−1</sup>) and hypoxic (DO &lt; 1 mg L<sup>−1</sup>) conditions for 21 days, with a third treatment combining hypoxia with nitrate addition (NO<sub>3</sub><sup>−</sup>-N, 5 mg L<sup>−1</sup>). Soluble reactive phosphorus (SRP) in the overlying water increased from 0.02 ± 0.01 to 0.84 ± 0.12 mg L<sup>−1</sup> under hypoxia, compared with 0.03 ± 0.01 to 0.11 ± 0.03 mg L<sup>−1</sup> under normoxia. The increase coincided with a 31% decrease in sediment Fe-bound P (Fe–P) and a 5.8-fold increase in porewater Fe(II). The estimated diffusive P flux under hypoxia (12.4 mg m<sup>−2</sup> d<sup>−1</sup>) was 7.8 times higher than under normoxia. Nitrate addition reduced the hypoxic SRP increase by 58%, although it did not prevent Fe–P loss. These results suggest that even short hypoxic events can rapidly mobilize Fe-bound P and that nitrate may temporarily buffer release. The findings have implications for reservoir oxygenation and source-water management, but should be tested under field flow conditions.</div>
+  <div class="keywords"><strong>Keywords:</strong> hypoxia; sediment phosphorus; Fe-bound phosphorus; drinking-water reservoir; nitrate; internal loading</div>
+  <div class="highlights">
+    <div>21-day intact-core incubation under normoxia, hypoxia, and hypoxia + nitrate.</div>
+    <div>Hypoxia raised overlying SRP from 0.02 to 0.84 mg L<sup>−1</sup> within 14 days.</div>
+    <div>Fe–P declined by 31%; diffusive flux was 7.8 times higher than under normoxia.</div>
+    <div>Nitrate reduced the hypoxic SRP increase by 58%, but Fe–P still declined.</div>
+  </div>
+  <div class="footer"><span>DEMO · not a real study</span><span>Page 1 of 5</span></div>
+</section>
+
+<!-- PAGE 2 -->
+<section class="sheet">
+  <div class="demo-header"><span>DEMO PAPER · FICTIONAL STUDY</span><span>DEMO</span></div>
+  <div class="watermark">DEMO</div>
+  <h2>1. Introduction</h2>
+  <p>Reservoirs used for drinking-water supply often develop strong thermal stratification in summer. Oxygen depletion in the hypolimnion can mobilize phosphorus (P) from bottom sediments, sustaining eutrophication even when external P loads are reduced. This internal loading is a well-recognized challenge for source-water management, yet the timing and magnitude of sediment P release during short hypoxic episodes remain difficult to predict.</p>
+  <p>Iron-bound P (Fe–P) is particularly sensitive to redox conditions. Under oxic conditions, Fe(III) oxides adsorb phosphate and keep porewater P low. When oxygen is depleted, microbial and abiotic reduction of Fe(III) releases Fe(II) and associated phosphate into porewater, from where it can diffuse into the overlying water. The classic conceptual model predicts a substantial increase in P release below an oxygen threshold, but the response time and the role of sediment heterogeneity are still debated.</p>
+  <p>Nitrate addition has been proposed as a management measure because nitrate can act as an alternative electron acceptor and may maintain a higher redox potential near the sediment–water interface. However, reported effects are variable, and nitrate may also stimulate organic matter decomposition or alter microbial communities. Evidence from short-term, controlled core experiments with simultaneous measurements of P fractions, porewater Fe(II), and diffusive flux is limited.</p>
+  <p>We addressed four questions: (1) How rapidly does overlying-water SRP respond to short-term hypoxia? (2) How much sediment Fe–P is lost during this response? (3) Can nitrate addition suppress the release? (4) How do differences among sites relate to sediment Fe–P content? We used intact cores from three locations in a eutrophic reservoir and a 21-day laboratory incubation to examine these questions under controlled conditions.</p>
+
+  <h2>2. Materials and methods</h2>
+  <h3>2.1 Study site and sediment collection</h3>
+  <p>The study was conducted in Qingyuan Reservoir (fictional name), a eutrophic drinking-water reservoir with a surface area of 12.6 km<sup>2</sup> and a mean depth of 18 m. Three sites were selected: S1 near the main river inflow (water depth 8 m), S2 in the central basin (22 m), and S3 near the dam (26 m). In August 2025, nine intact sediment cores were collected at each site using a gravity corer (6.0 cm inner diameter). Each core retained approximately 20 cm of sediment and 20 cm of overlying water. Cores were kept vertical, transported to the laboratory within 4 h, and acclimated at 18 ± 1 °C in the dark for 7 days before the experiment.</p>
+  <h3>2.2 Experimental design</h3>
+  <p>The incubation lasted 21 days. At each site, cores were assigned to three treatments in triplicate (n = 3): normoxia (target DO 7.5 ± 0.8 mg L<sup>−1</sup>), hypoxia (target DO 0.6 ± 0.2 mg L<sup>−1</sup>), and hypoxia plus nitrate (5 mg NO<sub>3</sub><sup>−</sup>-N L<sup>−1</sup>). Dissolved oxygen was controlled by gently bubbling air or N<sub>2</sub> into the headspace; the water column was not mixed vigorously, to preserve a diffusive boundary layer. Overlying water was sampled on days 0, 3, 7, 14, and 21. Sediment was sampled destructively at the beginning and end of the incubation for P fractionation. All cores were kept in the dark at 18 ± 1 °C.</p>
+  <div class="footer"><span>DEMO · fictional data</span><span>Page 2 of 5</span></div>
+</section>
+
+<!-- PAGE 3 -->
+<section class="sheet">
+  <div class="demo-header"><span>DEMO PAPER · FICTIONAL STUDY</span><span>DEMO</span></div>
+  <div class="watermark">DEMO</div>
+  <h2>2.3 Chemical analyses</h2>
+  <p>Overlying water was filtered through 0.45 µm membranes and analyzed for SRP by the molybdenum-blue method. Porewater was collected by centrifugation under nitrogen and analyzed for Fe(II) using the ferrozine assay. Dissolved oxygen, pH, and oxidation–reduction potential (ORP) were measured with calibrated electrodes at each sampling time. Sediment P was fractionated by a five-step sequential extraction into loosely bound P, Fe-bound P, Al-bound P, Ca-bound P, and organic P. Duplicate analyses were performed for every fifth sample; recovery of certified reference material was 92–106%, and the method detection limit for SRP was 0.003 mg L<sup>−1</sup>.</p>
+  <p>Diffusive P flux across the sediment–water interface was estimated using Fick's first law:</p>
+  <div class="equation">J = −φ · D<sub>s</sub> · (∂C/∂z)</div>
+  <p>where J is the diffusive flux (mg m<sup>−2</sup> d<sup>−1</sup>), φ is sediment porosity, D<sub>s</sub> is the bulk sediment diffusion coefficient corrected for tortuosity, and ∂C/∂z is the porewater SRP gradient across the top 2 cm. Porosity was determined from water content and dry bulk density. Flux estimates were calculated for each core at day 14, when the hypoxic SRP increase had stabilized.</p>
+
+  <h2>2.4 Data analysis</h2>
+  <p>Treatment effects on SRP, Fe–P, and porewater Fe(II) were tested with two-way analysis of variance (site × treatment), followed by Tukey's post-hoc test. Normality and homogeneity of variance were checked with Shapiro–Wilk and Levene tests, respectively. Linear regression was used to examine relationships between Fe–P loss, porewater Fe(II), and the increase in overlying SRP. Statistical significance was set at p &lt; 0.05. Values are reported as mean ± standard deviation unless otherwise stated.</p>
+
+  <h2>3. Results</h2>
+  <h3>3.1 Overlying-water SRP</h3>
+  <p>Initial SRP in the overlying water was low at all sites, ranging from 0.02 to 0.04 mg L<sup>−1</sup>. Under normoxia, SRP increased only slightly, reaching 0.11 ± 0.03 mg L<sup>−1</sup> by day 21. In contrast, hypoxia produced a rapid increase after day 7. By day 14, SRP had reached 0.84 ± 0.12 mg L<sup>−1</sup> across sites, approximately 42 times the initial mean. The response was strongest at site S2, where SRP reached 0.96 ± 0.09 mg L<sup>−1</sup>; S1 and S3 reached 0.78 and 0.79 mg L<sup>−1</sup>, respectively.</p>
+  <p>Nitrate addition significantly reduced the hypoxic release. At day 14, SRP in the hypoxia + nitrate treatment was 0.36 ± 0.05 mg L<sup>−1</sup>, 58% lower than in the hypoxia treatment. The difference remained significant at day 21 (p &lt; 0.01). Nitrate did not completely prevent the increase: SRP was still higher than in the normoxic controls.</p>
+  <div class="footer"><span>DEMO · fictional data</span><span>Page 3 of 5</span></div>
+</section>
+
+<!-- PAGE 4 -->
+<section class="sheet">
+  <div class="demo-header"><span>DEMO PAPER · FICTIONAL STUDY</span><span>DEMO</span></div>
+  <div class="watermark">DEMO</div>
+  <h3>3.2 Sediment phosphorus fractions</h3>
+  <p>Before incubation, Fe–P was the dominant reactive fraction, averaging 1.42 ± 0.18 mg g<sup>−1</sup> across sites. After 21 days of hypoxia, Fe–P decreased to 0.98 ± 0.14 mg g<sup>−1</sup>, a 31% loss. Al-bound P, Ca-bound P, and organic P changed by less than 8% and showed no consistent treatment effect. Under normoxia, Fe–P remained close to the initial value (1.36 ± 0.17 mg g<sup>−1</sup>). The loss of Fe–P under hypoxia was largest at S2 (from 1.68 to 1.06 mg g<sup>−1</sup>) and smallest at S1 (from 1.21 to 0.94 mg g<sup>−1</sup>).</p>
+  <h3>3.3 Porewater Fe(II), ORP, and diffusive flux</h3>
+  <p>Porewater Fe(II) increased from 0.7 ± 0.1 to 4.1 ± 0.6 mg L<sup>−1</sup> under hypoxia, a 5.8-fold increase. The increase coincided with a decline in sediment ORP from +180 ± 22 mV to −120 ± 31 mV. Under normoxia, Fe(II) remained below 1.0 mg L<sup>−1</sup> and ORP stayed above +120 mV. Nitrate addition partially buffered the redox decline: Fe(II) reached 2.4 ± 0.4 mg L<sup>−1</sup> and ORP remained at −40 ± 25 mV.</p>
+  <p>Estimated diffusive P flux at day 14 was 12.4 ± 1.8 mg m<sup>−2</sup> d<sup>−1</sup> under hypoxia, compared with 1.6 ± 0.3 mg m<sup>−2</sup> d<sup>−1</sup> under normoxia, a 7.8-fold difference. The hypoxia + nitrate treatment reduced the flux to 4.8 ± 0.9 mg m<sup>−2</sup> d<sup>−1</sup>. Site S2 had the highest hypoxic flux (16.1 ± 1.9 mg m<sup>−2</sup> d<sup>−1</sup>), consistent with its higher initial Fe–P content.</p>
+
+  <table>
+    <thead><tr><th>Site</th><th>Treatment</th><th>SRP at day 14 (mg L<sup>−1</sup>)</th><th>Fe–P loss (%)</th><th>Flux (mg m<sup>−2</sup> d<sup>−1</sup>)</th></tr></thead>
+    <tbody>
+      <tr><td>S1</td><td>Normoxia</td><td class="num">0.09</td><td class="num">4</td><td class="num">1.4</td></tr>
+      <tr><td>S1</td><td>Hypoxia</td><td class="num">0.78</td><td class="num">22</td><td class="num">10.9</td></tr>
+      <tr><td>S2</td><td>Normoxia</td><td class="num">0.13</td><td class="num">5</td><td class="num">1.9</td></tr>
+      <tr><td>S2</td><td>Hypoxia</td><td class="num">0.96</td><td class="num">37</td><td class="num">16.1</td></tr>
+      <tr><td>S3</td><td>Hypoxia</td><td class="num">0.79</td><td class="num">34</td><td class="num">12.2</td></tr>
+      <tr><td>All</td><td>Hypoxia + nitrate</td><td class="num">0.36</td><td class="num">18</td><td class="num">4.8</td></tr>
+    </tbody>
+  </table>
+  <div class="caption">Table 1. Selected results after 21 days of incubation. Values are means; standard deviations are given in the text. Fictional data for demonstration only.</div>
+  <h3>3.4 Relationships among indicators</h3>
+  <p>Across all hypoxic cores, the increase in overlying SRP was positively related to Fe–P loss (R<sup>2</sup> = 0.78, p &lt; 0.01, n = 9) and to porewater Fe(II) (R<sup>2</sup> = 0.71, p &lt; 0.05, n = 9). Flux was highest where the initial Fe–P pool and the loss of Fe–P were largest, but the relationship was weaker when S1 was excluded (R<sup>2</sup> = 0.43). This suggests that site-specific sediment composition modifies the release response.</p>
+  <div class="footer"><span>DEMO · fictional data</span><span>Page 4 of 5</span></div>
+</section>
+
+<!-- PAGE 5 -->
+<section class="sheet">
+  <div class="demo-header"><span>DEMO PAPER · FICTIONAL STUDY</span><span>DEMO</span></div>
+  <div class="watermark">DEMO</div>
+  <h2>4. Discussion</h2>
+  <p>The core experiment shows that a relatively short hypoxic period can mobilize a large amount of Fe-bound P. SRP increased by roughly an order of magnitude within 14 days, while Fe–P decreased by 31%. The coincidence of Fe–P loss, porewater Fe(II) accumulation, and ORP decline supports the expected redox-driven release mechanism. The response was rapid enough to fall within the duration of typical summer stratification events in temperate reservoirs.</p>
+  <p>Nitrate addition reduced the hypoxic SRP increase by 58% and lowered the diffusive flux from 12.4 to 4.8 mg m<sup>−2</sup> d<sup>−1</sup>. However, it did not prevent Fe–P loss, and Fe(II) still increased. This suggests that nitrate may act as a temporary redox buffer rather than restoring the original Fe(III) pool. The practical implication is that nitrate dosing could buy time during critical periods, but should not be treated as a permanent fix for internal loading.</p>
+  <p>Site differences were substantial. S2, with the highest initial Fe–P content, showed the strongest release. This is consistent with sediment composition controlling the magnitude of the response. A management strategy based only on average reservoir values may therefore miss hotspots near the central basin or other depositional zones. Mapping Fe–P before interventions could improve targeting.</p>
+  <h2>5. Limitations</h2>
+  <p>Several limitations should be considered. First, the experiment used intact cores in the dark and without flow, resuspension, or bioturbation; field fluxes may differ. Second, the incubation lasted 21 days, so longer-term exhaustion of the Fe–P pool and the persistence of the nitrate effect remain unknown. Third, only one reservoir was studied, and the “sites” are not independent systems. Fourth, we did not characterize microbial communities or measure nitrate consumption; the mechanism of the nitrate effect is therefore inferred rather than demonstrated. Finally, diffusive flux was calculated from porewater gradients and does not include ebullition or bioirrigation.</p>
+  <h2>6. Conclusions</h2>
+  <p>Short-term hypoxia rapidly mobilized Fe-bound P in the studied reservoir sediments. Overlying SRP increased from 0.02 to 0.84 mg L<sup>−1</sup> within 14 days, accompanied by a 31% loss of Fe–P and a 7.8-fold increase in diffusive flux relative to normoxia. Nitrate addition reduced the release by 58%, but did not prevent Fe–P loss. These findings support the need to consider sediment Fe–P hotspots and the timing of hypolimnetic oxygen depletion in reservoir management. Field-scale validation with flow, resuspension, and longer observation is needed before applying nitrate dosing as a management strategy.</p>
+  <h2>Data availability</h2>
+  <p class="small">This is a fictional demonstration document. No real dataset exists. In a real study, the data and code would be deposited in an institutional repository and linked here.</p>
+  <h2>References (fictional)</h2>
+  <div class="refs">
+    <p>Demo, A., Example, B. (2023). Redox-driven phosphorus release from reservoir sediments: a conceptual review. <em>Journal of Fictional Water Research</em>, 12, 101–118.</p>
+    <p>Sample, C., Test, D., Model, E. (2024). Nitrate addition and sediment phosphorus flux: a mesocosm experiment. <em>Demo Environmental Science</em>, 8, 44–59.</p>
+    <p>Placeholder, F. (2022). Stratification and hypolimnetic oxygen dynamics in a drinking-water reservoir. <em>Illustrative Limnology</em>, 5, 201–215.</p>
+    <p>Example, G., Demo, H. (2025). Sequential phosphorus fractionation in eutrophic sediments: a methods note. <em>Workbench Methods</em>, 2, 1–9.</p>
+  </div>
+  <div class="footer"><span>DEMO · fictional data</span><span>Page 5 of 5</span></div>
+</section>
+
+</body>
+</html>

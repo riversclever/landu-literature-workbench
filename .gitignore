@@ -1,0 +1,18 @@
+# Local library, API key, notes and export manifests
+data/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Packaging / editor / OS
+dist/
+*.zip
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
