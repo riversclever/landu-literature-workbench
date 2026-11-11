@@ -923,6 +923,8 @@
         : paper.card_updated_at
           ? '<span class="card-state">' + icon("sparkles") + "精读卡</span>"
           : '<span class="card-state pending">待精读</span>') +
+      '<button type="button" class="category-row-btn' + (categories.length ? " active" : "") + '" data-categorize="' + esc(paper.id) + '" title="设置分类" aria-label="设置分类">' +
+      icon("layers") + "<span>分类</span></button>" +
       '<button type="button" class="star-btn' + (paper.starred ? " active" : "") + '" data-star="' + esc(paper.id) + '" aria-label="' +
       (paper.starred ? "取消星标" : "加入星标") + '" aria-pressed="' + (paper.starred ? "true" : "false") + '">' + icon("star") + "</button>" +
       "</div></article>";
@@ -986,6 +988,13 @@
           event.preventDefault();
           event.stopPropagation();
           toggleStar(star.dataset.star);
+          return;
+        }
+        const categorize = event.target.closest("[data-categorize]");
+        if (categorize) {
+          event.preventDefault();
+          event.stopPropagation();
+          openCategoryAssignModal(categorize.dataset.categorize);
           return;
         }
         const tag = event.target.closest("a.tag");
@@ -1115,6 +1124,7 @@
     bar.className = "selection-bar";
     bar.innerHTML =
       '<span class="sel-count"><strong id="sel-count-num">0</strong>篇已选 <span id="sel-count-hint"></span></span>' +
+      '<button type="button" class="btn btn-sm" id="sel-category">' + icon("layers") + "分类</button>" +
       '<button type="button" class="btn btn-sm sel-delete" id="sel-delete">' + icon("trash") + "删除</button>" +
       '<button type="button" class="btn btn-primary" id="sel-compare">开始对比</button>' +
       '<button type="button" class="clear-sel" id="sel-clear">取消</button>';
@@ -1125,6 +1135,8 @@
       if (App.route.name === "library") renderLibrary();
       updateSelectionBar();
     });
+    const categoryButton = $("#sel-category");
+    if (categoryButton) categoryButton.addEventListener("click", openBulkCategoryAssignModal);
     $("#sel-delete").addEventListener("click", bulkDeleteSelected);
     $("#sel-compare").addEventListener("click", () => {
       if (App.selected.size < 2) {
@@ -1149,14 +1161,16 @@
     const hint = $("#sel-count-hint");
     const compareButton = $("#sel-compare");
     const deleteButton = $("#sel-delete");
+    const categoryButton = $("#sel-category");
     if (num) num.textContent = count;
     if (hint) {
       hint.textContent = count < 2
-        ? "再选 1 篇可对比"
+        ? "可分类；再选 1 篇可对比"
         : count > 5
-          ? "可批量删除；对比最多 5 篇"
-          : "可对比或批量删除";
+          ? "可分类、批量删除；对比最多 5 篇"
+          : "可分类、对比或批量删除";
     }
+    if (categoryButton) categoryButton.disabled = count === 0 || App.deleting;
     if (compareButton) {
       compareButton.disabled = count < 2 || count > 5 || App.deleting;
       compareButton.title = count > 5 ? "对比最多 5 篇，请先取消多余选择" : "打开多篇对比";
@@ -4313,6 +4327,86 @@
         }
       });
     }
+  }
+
+  function openBulkCategoryAssignModal() {
+    const ids = Array.from(App.selected);
+    if (!ids.length) return;
+    const categories = categoryList();
+    const body = '<div id="bulk-category-error"></div>' +
+      '<p class="category-intro">给选中的 ' + ids.length + ' 篇文献加入分类；不会移除它们已有的分类。</p>' +
+      (categories.length
+        ? '<div class="category-pick-list">' + categories.map((category) =>
+          '<label class="category-pick">' +
+          '<input type="checkbox" value="' + esc(category.id) + '">' +
+          categoryDot(category.color) +
+          '<span class="category-pick-name">' + esc(category.name) + "</span>" +
+          '<span class="category-pick-count">' + (category.count || 0) + " 篇</span></label>").join("") + "</div>"
+        : '<div class="category-assign-empty">还没有分类，先去创建一个吧。' +
+          '<button type="button" class="btn btn-sm" id="bulk-create-category">新建分类</button></div>') +
+      '<p class="setting-footnote">分类可以多选；保存后会追加到每篇文献，不会清空原有分类。</p>';
+    openModal({
+      title: "给选中的 " + ids.length + " 篇文献分类",
+      subtitle: "批量加入研究方向分类。",
+      body: body,
+      footer: '<button type="button" class="btn btn-quiet left" id="bulk-manage-categories">管理分类</button>' +
+        '<button type="button" class="btn" data-cancel>取消</button>' +
+        (categories.length ? '<button type="button" class="btn btn-primary" id="save-bulk-categories">保存分类</button>' : ""),
+    });
+    const root = $("#modal-root");
+    root.querySelector("[data-cancel]").addEventListener("click", closeModal);
+    const manage = $("#bulk-manage-categories");
+    if (manage) manage.addEventListener("click", openCategoryManager);
+    const create = $("#bulk-create-category");
+    if (create) create.addEventListener("click", openCategoryManager);
+    $$(".category-pick input", root).forEach((input) => {
+      input.addEventListener("change", () => {
+        const row = input.closest(".category-pick");
+        if (row) row.classList.toggle("checked", input.checked);
+      });
+    });
+    const saveButton = $("#save-bulk-categories");
+    if (!saveButton) return;
+    saveButton.addEventListener("click", async () => {
+      const categoryIds = $$(".category-pick input:checked", root).map((input) => input.value);
+      if (!categoryIds.length) {
+        const errorBox = $("#bulk-category-error");
+        if (errorBox) {
+          errorBox.innerHTML = '<div class="inline-error" style="margin-bottom:14px">' + icon("alert") +
+            "<span>请至少选择一个分类。</span></div>";
+        }
+        return;
+      }
+      saveButton.disabled = true;
+      saveButton.textContent = "保存中…";
+      let updated = 0;
+      try {
+        for (const id of ids) {
+          const paper = App.papers.find((item) => item.id === id);
+          if (!paper) continue;
+          const merged = Array.from(new Set([...(paper.categories || []), ...categoryIds]));
+          await api("/api/papers/" + encodeURIComponent(id), {
+            method: "PATCH",
+            body: { categories: merged },
+          });
+          updated += 1;
+        }
+        await refreshState(true);
+        App.selected.clear();
+        closeModal();
+        if (App.route.name === "library") renderLibrary();
+        toast("已给 " + updated + " 篇文献加入分类", "success");
+      } catch (error) {
+        await refreshState(true).catch(() => {});
+        saveButton.disabled = false;
+        saveButton.textContent = "保存分类";
+        const errorBox = $("#bulk-category-error");
+        if (errorBox) {
+          errorBox.innerHTML = '<div class="inline-error" style="margin-bottom:14px">' + icon("alert") +
+            "<span>" + esc(error.message) + "</span></div>";
+        }
+      }
+    });
   }
 
   // ─────────────────────────────────────────────────────────────

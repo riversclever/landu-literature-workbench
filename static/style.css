@@ -637,6 +637,25 @@ svg { flex-shrink: 0; }
 .paper-side { display: flex; align-items: flex-start; gap: 4px; padding-top: 2px; }
 .paper-side .star-btn { opacity: 0; }
 .paper-row:hover .paper-side .star-btn, .paper-side .star-btn.active { opacity: 1; }
+.category-row-btn {
+  height: 27px;
+  padding: 0 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--faint);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.category-row-btn .icon { width: 13px; height: 13px; }
+.category-row-btn:hover { color: var(--green); background: rgba(32, 88, 75, 0.06); border-color: rgba(32, 88, 75, 0.12); }
+.category-row-btn.active { color: var(--copper); background: rgba(173, 119, 70, 0.08); }
+@media (max-width: 760px) {
+  .category-row-btn span { display: none; }
+}
 .status-pill {
   display: inline-flex;
   align-items: center;
