@@ -16,3 +16,6 @@ Thumbs.db
 .idea/
 .vscode/
 *.log
+
+# Local desktop build
+*.exe

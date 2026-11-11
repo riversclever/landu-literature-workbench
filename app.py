@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import logging
 import mimetypes
 import secrets
 import socket
@@ -20,6 +21,7 @@ import traceback
 import urllib.request
 import uuid
 import webbrowser
+from logging.handlers import RotatingFileHandler
 from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -36,6 +38,25 @@ START_PORT = 8765
 MAX_UPLOAD = 120 * 1024 * 1024
 
 storage.ensure_dirs()
+
+LOGGER = logging.getLogger("landu.workbench")
+
+
+def _setup_logging() -> None:
+    if LOGGER.handlers:
+        return
+    LOGGER.setLevel(logging.INFO)
+    try:
+        handler = RotatingFileHandler(
+            storage.DATA_DIR / "workbench.log",
+            maxBytes=2_000_000,
+            backupCount=3,
+            encoding="utf-8",
+        )
+        handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
+        LOGGER.addHandler(handler)
+    except Exception:
+        pass
 
 
 class AppError(Exception):
@@ -99,11 +120,17 @@ def _lean_meta(meta: dict[str, Any]) -> dict[str, Any]:
 class WorkbenchServer(ThreadingHTTPServer):
     allow_reuse_address = False
     daemon_threads = True
+    request_queue_size = 128
+
+    def handle_error(self, request: Any, client_address: Any) -> None:
+        LOGGER.exception("Unhandled error while serving %s", client_address)
+        super().handle_error(request, client_address)
 
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "LanduWorkbench/1.0"
     protocol_version = "HTTP/1.1"
+    timeout = 120
 
     # ------------------------------------------------------------------
     # Plumbing
@@ -186,8 +213,10 @@ class Handler(BaseHTTPRequestHandler):
             self.send_response(302)
             self.send_header("Location", "/login")
             self.send_header("Content-Length", "0")
+            self.send_header("Connection", "close")
             self._security_headers()
             self.end_headers()
+            self.close_connection = True
         else:
             self.send_error_json("手机访问需要先登录", 401, "unauthorized")
 
@@ -269,8 +298,10 @@ class Handler(BaseHTTPRequestHandler):
             self.send_response(302)
             self.send_header("Location", "/")
             self.send_header("Content-Length", "0")
+            self.send_header("Connection", "close")
             self._security_headers()
             self.end_headers()
+            self.close_connection = True
             return
         self._send_bytes(
             self._login_page_html().encode("utf-8"),
@@ -363,11 +394,13 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(payload)))
         self.send_header("Cache-Control", cache)
+        self.send_header("Connection", "close")
         self._security_headers()
         if extra_headers:
             for key, value in extra_headers.items():
                 self.send_header(key, value)
         self.end_headers()
+        self.close_connection = True
         if not head_only:
             try:
                 self.wfile.write(payload)
@@ -604,7 +637,9 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_response(416)
                 self.send_header("Content-Range", f"bytes */{size}")
                 self.send_header("Content-Length", "0")
+                self.send_header("Connection", "close")
                 self.end_headers()
+                self.close_connection = True
                 return
             start_text, end_text = match.groups()
             if start_text:
@@ -618,7 +653,9 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_response(416)
                 self.send_header("Content-Range", f"bytes */{size}")
                 self.send_header("Content-Length", "0")
+                self.send_header("Connection", "close")
                 self.end_headers()
+                self.close_connection = True
                 return
             end = min(end, size - 1)
             status = 206
@@ -628,10 +665,12 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Accept-Ranges", "bytes")
         self.send_header("Content-Length", str(length))
         self.send_header("Cache-Control", "private, max-age=3600")
+        self.send_header("Connection", "close")
         if status == 206:
             self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
         self._security_headers()
         self.end_headers()
+        self.close_connection = True
         if head_only:
             return
         try:
@@ -1279,7 +1318,31 @@ def _already_running(port: int) -> bool:
         return False
 
 
+def _disable_quick_edit() -> None:
+    """Prevent Windows QuickEdit from pausing the server when the console is clicked."""
+    if sys.platform != "win32":
+        return
+    try:
+        import ctypes
+        from ctypes import wintypes
+
+        kernel32 = ctypes.windll.kernel32
+        handle = kernel32.GetStdHandle(-10)
+        if handle in (0, -1):
+            return
+        mode = wintypes.DWORD()
+        if not kernel32.GetConsoleMode(handle, ctypes.byref(mode)):
+            return
+        enable_extended_flags = 0x0080
+        enable_quick_edit = 0x0040
+        mode.value = (mode.value | enable_extended_flags) & ~enable_quick_edit
+        kernel32.SetConsoleMode(handle, mode)
+    except Exception:
+        pass
+
+
 def main() -> None:
+    _setup_logging()
     if sys.platform == "win32":
         try:
             import ctypes
@@ -1288,6 +1351,7 @@ def main() -> None:
             ctypes.windll.kernel32.SetConsoleCP(65001)
         except Exception:
             pass
+        _disable_quick_edit()
         try:
             if sys.stdout is not None:
                 sys.stdout.reconfigure(encoding="utf-8", errors="replace", line_buffering=True)
@@ -1341,19 +1405,33 @@ def main() -> None:
         print("  手机访问：未开启（设置 → 手机访问）")
     print(f"  模型：{config.get('model', '')}（API Key {key_state}）")
     print(f"  数据：{storage.DATA_DIR}")
+    print("  日志：data/workbench.log")
     print("  关闭此窗口即停止服务。")
     print("")
     try:
         sys.stdout.flush()
     except Exception:
         pass
+    LOGGER.info("Workbench started on port %s; data=%s", port, storage.DATA_DIR)
     if not args.no_browser:
         threading.Thread(target=_open_browser, args=(url,), daemon=True).start()
+    failures = 0
     try:
-        server.serve_forever()
+        while failures < 5:
+            try:
+                server.serve_forever(poll_interval=0.5)
+                break
+            except KeyboardInterrupt:
+                raise
+            except Exception:
+                failures += 1
+                LOGGER.exception("serve_forever failed (%s/5)", failures)
+                print("工作台服务出现异常，正在尝试恢复…")
+                time.sleep(1.5)
     except KeyboardInterrupt:
         print("\n已停止。")
     finally:
+        LOGGER.info("Workbench stopped")
         server.server_close()
 
 

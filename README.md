@@ -6,10 +6,10 @@
 
 ## 下载
 
-- [Windows 免安装版](../../releases/latest)：解压后双击 `澜读文献工作台.exe`，不需要安装 Python。
+- [Windows 桌面版](../../releases/latest)：解压后双击 `澜读文献工作台.exe`，打开独立窗口，不需要浏览器，也不需要安装 Python。
 - [源码 ZIP](../../archive/refs/heads/main.zip)：适合 macOS / Linux，或想自己改代码的人。
 
-> Windows 免安装版请在仓库的 **Releases** 页面下载；源码版需要 Python 3.10+。
+> Windows 桌面版请在仓库的 **Releases** 页面下载；源码版需要 Python 3.10+。
 
 ![精读卡界面](docs/screenshot.png)
 
@@ -39,26 +39,27 @@
 ## 系统要求
 
 - Windows 10/11 或 macOS / Linux
-- 源码版需要 Python **3.10 或更高版本**（推荐 3.12）；Windows 免安装版不需要
+- 源码版需要 Python **3.10 或更高版本**（推荐 3.12）；Windows 桌面版不需要
+- Windows 桌面版需要 Microsoft Edge WebView2 Runtime（Windows 10/11 通常已随 Edge 安装）
 - 一个兼容 OpenAI Chat Completions 接口的模型服务：
   - 默认支持 DeepSeek
   - 也内置通义千问、智谱 GLM、OpenAI 的预设
   - 可填任意兼容接口，或本机 Ollama（本地地址不强制要求 Key）
 
-源码版首次运行需要联网安装两个 Python 依赖：`requests` 和 `pymupdf`。如果使用 Windows 免安装版，则不需要安装 Python。
+源码版首次运行需要联网安装两个 Python 依赖：`requests` 和 `pymupdf`。如果使用 Windows 桌面版，则不需要安装 Python。
 
 ## 快速开始
 
-### Windows 免安装版（推荐给不想装 Python 的人）
+### Windows 桌面版（推荐给不想装 Python 的人）
 
-如果不想安装 Python，使用单独提供的 `澜读文献工作台-Windows-免安装版.zip`：
+如果不想安装 Python，使用 Release 里的 `landu-workbench-windows-desktop.zip`：
 
 1. 解压整个文件夹，不要直接在压缩包里双击。
 2. 双击 **`澜读文献工作台.exe`**。
 3. 如果 Windows 弹出 SmartScreen 提示，点 **更多信息 → 仍要运行**。
-4. 浏览器会自动打开，按提示填自己的 API Key 和研究方向。
+4. 会打开一个独立的「澜读 · 文献工作台」窗口，没有浏览器地址栏和标签页；按提示填自己的 API Key 和研究方向。
 
-数据保存在 exe 旁边的 `data/`。移动程序时请把 `data/` 一起带走；备份时复制整个文件夹即可。
+数据保存在 exe 旁边的 `data/`。移动程序时请把 `data/` 一起带走；备份时复制整个文件夹即可。关闭窗口会停止工作台服务；手机访问需要保持窗口打开（可以最小化）。
 
 ### Windows 源码版
 
@@ -76,6 +77,17 @@ python app.py
 ```
 
 这样能看到具体报错。
+
+### Windows 桌面版（源码运行）
+
+如果你已经有 Python 环境，也可以直接打开原生桌面窗口，不经过浏览器：
+
+```bash
+python -m pip install -r requirements-desktop.txt
+python desktop.py
+```
+
+窗口关闭即停止服务；首次需要 Microsoft Edge WebView2 Runtime（Windows 10/11 通常已随 Edge 安装）。
 
 ### macOS / Linux
 
@@ -192,11 +204,13 @@ app.py                 # HTTP 服务、路由和 API
 ai.py                  # 提示词与模型请求
 storage.py             # 本地数据、PDF、分类、回收站、Obsidian
 zotero.py              # Zotero 本地 API
+desktop.py             # Windows 桌面窗口入口（WebView2）
 static/                # 前端页面、样式和脚本
 demo/                  # 虚构示例论文与示例精读卡
 data/                  # 运行后生成的本地数据（不进入版本库）
 requirements.txt
-启动工作台.bat          # Windows 启动器
+requirements-desktop.txt
+启动工作台.bat          # Windows 浏览器版启动器
 start.sh               # macOS / Linux 启动器
 ```
 
