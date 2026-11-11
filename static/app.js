@@ -3076,7 +3076,7 @@
       '<div class="form-actions"><button type="button" class="btn btn-sm" id="open-demo">' + icon("sparkles") + "查看内置示例</button>" +
       '<span class="setting-footnote">虚构演示例文，不消耗模型额度，可随时删除</span></div>' +
       '<div class="privacy-note">' + icon("check") + "<span>不上传云端、不做账号同步；删除文献会先移入回收站，彻底删除后才移除本地 PDF 与笔记。</span></div>" +
-      '<p class="setting-footnote" style="margin-top:16px">澜读 · 文献工作台 1.0 · 本地优先的文献精读空间</p>' +
+      '<p class="setting-footnote" style="margin-top:16px">澜读 · 文献工作台 1.0.1 · 本地优先的文献精读空间</p>' +
       "</section>" +
 
       "</div></div>";

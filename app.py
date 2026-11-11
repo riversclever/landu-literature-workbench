@@ -128,7 +128,7 @@ class WorkbenchServer(ThreadingHTTPServer):
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "LanduWorkbench/1.0"
+    server_version = "LanduWorkbench/1.0.1"
     protocol_version = "HTTP/1.1"
     timeout = 120
 
@@ -526,7 +526,7 @@ class Handler(BaseHTTPRequestHandler):
             return
         try:
             if path == "/api/ping":
-                self.send_json({"ok": True, "version": "1.0"})
+                self.send_json({"ok": True, "version": "1.0.1"})
                 return
             if path == "/api/state":
                 papers = storage.list_papers()
@@ -536,7 +536,7 @@ class Handler(BaseHTTPRequestHandler):
                         "stats": storage.library_stats(papers),
                         "settings": self._settings_payload(),
                         "trash_count": storage.trash_count(),
-                        "version": "1.0",
+                        "version": "1.0.1",
                     }
                 )
                 return
