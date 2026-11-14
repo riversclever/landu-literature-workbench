@@ -26,20 +26,30 @@ def _message(text: str) -> None:
         print(text)
 
 
-def _start_server(start_port: int) -> tuple[app.WorkbenchServer, int]:
+def _start_server(
+    start_port: int,
+) -> tuple[app.WorkbenchServer | None, int]:
+    """Bind the first free port; reuse an existing instance if one is found.
+
+    Probing every port over HTTP before binding is very slow on some Windows
+    setups (closed local ports can take ~1s to time out). Binding is immediate,
+    so only check for an existing instance after a bind actually fails.
+    """
     last_error: Exception | None = None
     for port in range(start_port, start_port + 20):
         try:
             server = app.WorkbenchServer(("0.0.0.0", port), app.Handler)
-            threading.Thread(
-                target=server.serve_forever,
-                kwargs={"poll_interval": 0.5},
-                daemon=True,
-            ).start()
-            return server, port
         except OSError as exc:
             last_error = exc
+            if app._already_running(port):
+                return None, port
             continue
+        threading.Thread(
+            target=server.serve_forever,
+            kwargs={"poll_interval": 0.5},
+            daemon=True,
+        ).start()
+        return server, port
     raise RuntimeError("无法找到可用端口（8765–8784）。") from last_error
 
 
@@ -54,13 +64,6 @@ def _wait_ready(port: int, timeout: float = 15.0) -> bool:
     return False
 
 
-def _existing_port(start_port: int) -> int | None:
-    for port in range(start_port, start_port + 20):
-        if app._already_running(port):
-            return port
-    return None
-
-
 def main() -> int:
     parser = argparse.ArgumentParser(description="澜读 · 桌面版")
     parser.add_argument("--port", type=int, default=app.START_PORT)
@@ -72,11 +75,11 @@ def main() -> int:
 
     server: app.WorkbenchServer | None = None
     try:
-        port = _existing_port(args.port)
-        if port is None:
-            server, port = _start_server(args.port)
-            if not _wait_ready(port):
-                raise RuntimeError("工作台服务没有正常启动。")
+        server, port = _start_server(args.port)
+        if server is None:
+            app.LOGGER.info("Reusing existing workbench on port %s", port)
+        elif not _wait_ready(port):
+            raise RuntimeError("工作台服务没有正常启动。")
         url = f"http://127.0.0.1:{port}"
 
         webview.settings["ALLOW_DOWNLOADS"] = True
